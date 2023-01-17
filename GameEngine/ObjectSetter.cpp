@@ -2,6 +2,7 @@
 #include"Engine/Model.h"
 #include"Player.h"
 #include"Engine/Fbx.h"
+#include"ObstacleSet.h"
 #include"SetObject.h"
 #include"Test.h"
 #include"Stage1.h"
@@ -18,6 +19,7 @@ void ObjectSetter::Initialize()
 {
 	Instantiate<Stage1>(GetParent());
 	Instantiate<Player>(GetParent());
+	Instantiate<ObstacleSet>(GetParent());
 }
 
 void ObjectSetter::Update()

@@ -14,7 +14,7 @@ Player::Player(GameObject* parent)
 	centerPos_(XMVectorSet(0,0,0,0)),
 	hModel_(-1),
 	rotate(0),
-	vCamPos_(XMVectorSet(0, 5, -5, 0))
+	vCamPos_(XMVectorSet(0, 5, -15, 0))
 {
 }
 
@@ -68,7 +68,7 @@ void Player::CameraControl()
 	
 	XMFLOAT3 pos = { 0,5,-10 };
 	XMVECTOR target = XMVectorSet(0, 0, 5, 0);
-	Camera::SetUpVector(centerPos_);
+	Camera::SetUpVector(-centerPos_);
 	Camera::SetPosition(centerPos_+vCamPos_);
 	Camera::SetTarget(XMLoadFloat3(&transform_.position_)+target);
 }

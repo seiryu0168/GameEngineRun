@@ -5,7 +5,7 @@ class ObstacleSet : public GameObject
 {
  private:
 	 int setInterval_;
-	 static XMVECTOR vSet_;
+	 XMVECTOR vSet_;
 	 PaternState<ObstacleSet>* pPattern_;
  public:
 	 ObstacleSet(GameObject* parent);
@@ -19,6 +19,7 @@ class ObstacleSet : public GameObject
 	 void ChangeState(PaternState<ObstacleSet>* ptn);
 
 	 XMVECTOR GetvSet() { return vSet_; }
+
 	 class SetPattern1: public PaternState<ObstacleSet>
 	 {
 	 private:
@@ -35,8 +36,8 @@ class ObstacleSet : public GameObject
 			 return ins;
 		 }
 
-		 void Init(SetPattern1& ptn);
-		 void Update(SetPattern1& ptn);
+		 void Init(ObstacleSet& ptn);
+		 void Update(ObstacleSet& ptn);
 	 };
 
 	 class SetPattern2 : public PaternState<ObstacleSet>
@@ -55,8 +56,8 @@ class ObstacleSet : public GameObject
 			 return ins;
 		 }
 
-		 void Init(SetPattern2& ptn);
-		 void Update(SetPattern2& ptn);
+		 void Init(ObstacleSet& ptn);
+		 void Update(ObstacleSet& ptn);
 	 };
 };
 
