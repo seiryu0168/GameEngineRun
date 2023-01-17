@@ -190,7 +190,10 @@
     <ClCompile Include="ImGui\imgui_tables.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="NormalBlock.cpp" />
     <ClCompile Include="ObjectSetter.cpp" />
+    <ClCompile Include="ObstacleSet.cpp" />
+    <ClCompile Include="PaternState.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="SetObject.cpp" />
@@ -236,7 +239,10 @@
     <ClInclude Include="ImGui\imstb_rectpack.h" />
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
+    <ClInclude Include="NormalBlock.h" />
     <ClInclude Include="ObjectSetter.h" />
+    <ClInclude Include="ObstacleSet.h" />
+    <ClInclude Include="PaternState.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="resource.h" />

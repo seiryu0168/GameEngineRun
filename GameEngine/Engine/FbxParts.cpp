@@ -15,6 +15,7 @@ FbxParts::FbxParts()
 
 FbxParts::~FbxParts()
 {
+	SAFE_DELETE(pToonTexture_);
 	SAFE_DELETE(pVertices_);
 	SAFE_RELEASE(pVertexBuffer_);
 
@@ -47,7 +48,8 @@ FbxParts::~FbxParts()
 HRESULT FbxParts::Init(FbxNode* pNode)
 {
 	FbxMesh* mesh = pNode->GetMesh();
-
+	pToonTexture_ = new Texture;
+	pToonTexture_->Load("ToonTexture.jpg");
 	//各情報の個数を取得
 	vertexCount_ = mesh->GetControlPointsCount();	//頂点の数
 	polygonCount_ = mesh->GetPolygonCount();	//ポリゴンの数
@@ -107,11 +109,10 @@ void FbxParts::Draw(Transform& transform,XMFLOAT2 uvScroll)
 
 		Direct3D::pContext->Map(pConstantBuffer_, 0, D3D11_MAP_WRITE_DISCARD, 0, &pdata);			//GPUからのデータアクセスを止める
 		memcpy_s(pdata.pData, pdata.RowPitch, (void*)(&cb), sizeof(cb));							//データを値を送る
-		Texture* pToonTexture = new Texture;
-		pToonTexture->Load("Assets\\ToonTexture.jpg");
-		ID3D11SamplerState* pToonSampler = pToonTexture->GetSampler();
+		
+		ID3D11SamplerState* pToonSampler = pToonTexture_->GetSampler();
 		Direct3D::pContext->PSSetSamplers(1, 1, &pToonSampler);
-		ID3D11ShaderResourceView* pToonSRV = pToonTexture->GetSRV();
+		ID3D11ShaderResourceView* pToonSRV = pToonTexture_->GetSRV();
 		Direct3D::pContext->PSSetShaderResources(1, 1, &pToonSRV);
 		
 
