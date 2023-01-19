@@ -9,6 +9,7 @@ namespace EngineTime
 	unsigned long GetTime();
 	float GetDeltaTime();
 	float GetTimeScale();
+	int GetFrame();
 	void SetTimeScale(float scale);
 	void SetTime();
 	void Update();

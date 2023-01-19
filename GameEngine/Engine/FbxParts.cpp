@@ -606,7 +606,7 @@ void FbxParts::RayCast(RayCastData& rayData,Transform& transform)
 			if (Math::Intersect(rayData.start, rayData.dir, v0, v1, v2, dist, hitPosition) && dist < rayData.dist && dist < rayData.distLimit && Math::IsFrontSurface(normal, XMLoadFloat3(&rayData.dir)))
 			{
 				rayData.normal = normal;
-				rayData.hitPos = XMVector3TransformCoord(hitPosition, transform.GetWorldMatrix());
+				rayData.hitPos = hitPosition;// XMVector3TransformCoord(hitPosition, transform.GetWorldMatrix());
 				rayData.dist = dist;
 				rayData.hit = true;
 			}

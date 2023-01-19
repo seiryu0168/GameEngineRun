@@ -202,6 +202,7 @@
     <ClCompile Include="EngineTime.cpp" />
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="TitleScene.cpp" />
+    <ClCompile Include="TitleUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Easing.h" />
@@ -252,6 +253,7 @@
     <ClInclude Include="EngineTime.h" />
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="TitleUI.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="BillBoard.hlsl">

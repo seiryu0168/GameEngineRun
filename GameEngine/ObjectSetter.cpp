@@ -17,9 +17,19 @@ ObjectSetter::~ObjectSetter()
 
 void ObjectSetter::Initialize()
 {
-	Instantiate<Stage1>(GetParent());
-	Instantiate<Player>(GetParent());
-	Instantiate<ObstacleSet>(GetParent());
+	std::string sceneName = GetParent()->GetObjectName();
+	if (sceneName == "TitleName")
+	{
+
+	}
+
+	if (sceneName == "PlayScene")
+	{
+		Instantiate<Stage1>(GetParent());
+		Instantiate<Player>(GetParent());
+		Instantiate<ObstacleSet>(GetParent());
+	}
+
 }
 
 void ObjectSetter::Update()

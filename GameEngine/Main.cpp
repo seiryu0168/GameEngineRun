@@ -7,6 +7,7 @@
 #include"Engine/Sprite.h"
 #include"Engine/Transform.h"
 #include"ImageManager.h"
+#include"EngineTime.h"
 #include"DebugUI.h"
 #include"Engine/Input.h"
 #include"Engine/RootJob.h"
@@ -14,6 +15,7 @@
 #include"ImGui/imgui_impl_dx11.h"
 #include"ImGui/imgui_impl_win32.h"
 #include"Engine/Audio.h"
+#include"ImageManager.h"
 
 
 #pragma comment(lib, "winmm.lib")
@@ -135,6 +137,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 				lastUpdateTime = nowTime;
 				countFps++;
 				pRootJob->UpdateSub();
+				EngineTime::Update();
 #if true
 				DebugUI::Debug(pRootJob->FindChild("SceneManager"));
 				DebugUI::Log();
@@ -144,6 +147,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, 
 				Direct3D::BeginDraw();
 				pRootJob->DrawSub();
 				pRootJob->SecondDrawSub();
+				ImageManager::Draw();
 
 				ImageManager::Draw();
 				ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());

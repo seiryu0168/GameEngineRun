@@ -5,6 +5,8 @@
 //■■シーンを管理するクラス
 class PlayScene : public GameObject
 {
+private:
+	int elapsedFrame_;
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
@@ -21,4 +23,6 @@ public:
 
 	//開放
 	void Release() override;
+
+	int GetTime() { return elapsedFrame_; }
 };

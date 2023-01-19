@@ -1,4 +1,5 @@
 #include "NormalBlock.h"
+#include"EngineTime.h"
 #include"Engine/Model.h"
 
 namespace
@@ -24,6 +25,7 @@ void NormalBlock::Initialize()
 
 void NormalBlock::Update()
 {
+	speedRate_ = EngineTime::GetFrame() / 60.0f * 0.01f;
 	transform_.position_.z -= SPEED*speedRate_;
 }
 

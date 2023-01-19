@@ -81,8 +81,8 @@ float4 PS(VS_OUT inData) : SV_Target
 	float4 diffuse;
 
 		float2 uv1 = inData.uv;
-		uv1.x += g_uvScroll.x * 0.3f;
-		uv1.y += g_uvScroll.y * 0.3f;
+		uv1.x += g_uvScroll.x * 0.01f;
+		uv1.y += g_uvScroll.y * 0.01f;
 	if (g_isTexture == true)
 	{
 		diffuse = g_texture.Sample(g_sampler, uv1);

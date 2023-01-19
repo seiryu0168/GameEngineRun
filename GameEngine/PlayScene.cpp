@@ -16,6 +16,7 @@ void PlayScene::Initialize()
 //XV
 void PlayScene::Update()
 {
+	elapsedFrame_++;
 }
 
 //•`‰æ

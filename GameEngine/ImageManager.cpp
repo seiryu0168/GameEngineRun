@@ -9,12 +9,14 @@ namespace ImageManager
 		Sprite* pSprite_;
 		RECT rect_;
 		float alpha_;
+		XMFLOAT4 changeColor_;
 		Transform transform_;
 		imageData()
 		{
 			fileName_ = "";
 			pSprite_ = nullptr;
 			alpha_ = 1.0f;
+			changeColor_ = { 1,1,1,1 };
 		}
 	};
 
@@ -63,7 +65,7 @@ int ImageManager::Load(std::string fileName)
 
 void ImageManager::Draw(int imgHandle)
 {
-	imageList_[imgHandle]->pSprite_->Draw(imageList_[imgHandle]->transform_, imageList_[imgHandle]->rect_, imageList_[imgHandle]->alpha_);
+	imageList_[imgHandle]->pSprite_->Draw(imageList_[imgHandle]->transform_, imageList_[imgHandle]->rect_, imageList_[imgHandle]->alpha_, imageList_[imgHandle]->changeColor_);
 }
 
 void ImageManager::Draw()
@@ -140,7 +142,13 @@ void ImageManager::SetImageSize(int imgHandle, XMFLOAT3 size)
 	}
 
 	size.z = 0;
-	imageList_[imgHandle]->transform_.scale_ = size;
+	imageList_[imgHandle]->transform_.scale_.x *= size.x;
+	imageList_[imgHandle]->transform_.scale_.y *= size.y;
+}
+
+void ImageManager::ColorChange(int imgHandle,XMFLOAT4 color)
+{
+	imageList_[imgHandle]->changeColor_ = color;
 }
 
 void ImageManager::Release(int imgHandle)

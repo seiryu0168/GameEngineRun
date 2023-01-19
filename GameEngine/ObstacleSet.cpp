@@ -21,6 +21,7 @@ ObstacleSet::~ObstacleSet()
 
 void ObstacleSet::Initialize()
 {
+	srand((unsigned int)time(NULL));
 	RayCastData ray;
 	ray.dir = RAYCAST_DIR;
 	ray.start = transform_.position_;
@@ -28,6 +29,21 @@ void ObstacleSet::Initialize()
 
 	vSet_ = XMVector3Normalize((ray.hitPos-XMLoadFloat3(&transform_.position_))) * (ray.dist-1.0f);
 	ChangeState(SetPattern1::GetInstance());
+
+	NormalBlock* pNormal = nullptr;
+	XMFLOAT3 initPos = {};
+	XMFLOAT3 setPos = transform_.position_;
+	setPos.z = 30;
+	XMVECTOR qRotate = XMVectorSet(0, 0, 0, 0);
+	for (int i = 0; i < 20; i++)
+	{
+		pNormal = Instantiate<NormalBlock>(GetParent());
+		qRotate= XMQuaternionRotationAxis(ROTATE_AXIS, (float)((float)(rand() % 630) / 100.0f));
+		vSet_ = XMVector3Rotate(vSet_, qRotate);
+		XMStoreFloat3(&initPos, XMLoadFloat3(&setPos) + vSet_);
+		pNormal->SetPosition(initPos);
+		setPos.z+=20;
+	}
 	transform_.position_.z = 600;
 }
 
@@ -51,7 +67,7 @@ void ObstacleSet::ChangeState(PaternState<ObstacleSet>* ptn)
 
 void ObstacleSet::SetPattern1::Init(ObstacleSet& ptn)
 {
-	srand((unsigned int)time(NULL));
+	
 }
 
 void ObstacleSet::SetPattern1::Update(ObstacleSet& ptn)

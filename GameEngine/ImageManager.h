@@ -63,6 +63,12 @@ namespace ImageManager
 	/// <param name="size">サイズ</param>
 	void  SetImageSize(int imgHandle, XMFLOAT3 size);
 
+	/// <summary>
+	/// 色を変える
+	/// </summary>
+	/// <param name="color">RGBAの値</param>
+	void ColorChange(int imgHandle,XMFLOAT4 color);
+
 	void Release(int imgHandle);
 	void AllRelease();
 };
