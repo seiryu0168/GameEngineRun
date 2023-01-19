@@ -19,10 +19,16 @@ FbxParts::~FbxParts()
 	SAFE_DELETE(pVertices_);
 	SAFE_RELEASE(pVertexBuffer_);
 
+	for (int i = 0; i < materialCount_; i++)
+	{
+		SAFE_RELEASE(ppIndexBuffer_[i]);
+		SAFE_DELETE(pMaterialList_[i].pTexture);
+		SAFE_DELETE_ARRAY(ppIndex_);
+
+	}
 	SAFE_DELETE_ARRAY(ppIndexBuffer_);
 	SAFE_RELEASE(pConstantBuffer_);
 
-	//SAFE_DELETE(pSkinInfo_);
 	SAFE_DELETE(ppCluster_);
 	if (pWeightArray_ != nullptr)
 	{
@@ -34,13 +40,6 @@ FbxParts::~FbxParts()
 		}
 	}
 
-	for (int i = 0; i < materialCount_; i++)
-	{
-		SAFE_RELEASE(ppIndexBuffer_[i]);
-		SAFE_DELETE(pMaterialList_[i].pTexture);
-		SAFE_DELETE_ARRAY(ppIndex_);
-
-	}
 	SAFE_DELETE(indexCount_);
 
 }
