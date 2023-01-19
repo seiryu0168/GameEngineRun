@@ -3,7 +3,7 @@
 
 namespace
 {
-	static const float SPEED = 0.3f;
+	static const float SPEED = 6.0f;
 }
 NormalBlock::NormalBlock(GameObject* parent)
 	:GameObject(parent,"NormalBlock"),

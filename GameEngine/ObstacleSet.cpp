@@ -23,12 +23,12 @@ void ObstacleSet::Initialize()
 {
 	RayCastData ray;
 	ray.dir = RAYCAST_DIR;
-	transform_.position_.z = 20;
 	ray.start = transform_.position_;
 	ModelManager::RayCast(((Stage1*)FindObject("Stage1"))->GetModelHandle(),ray);
 
-	vSet_ = XMVectorSet(0, -1, 0, 0) * (ray.dist-1.0f);
+	vSet_ = XMVector3Normalize((ray.hitPos-XMLoadFloat3(&transform_.position_))) * (ray.dist-1.0f);
 	ChangeState(SetPattern1::GetInstance());
+	transform_.position_.z = 600;
 }
 
 void ObstacleSet::Update()
@@ -60,10 +60,9 @@ void ObstacleSet::SetPattern1::Update(ObstacleSet& ptn)
 
 	if (settingTime_==SET_INTERVAL)
 	{
-
 		XMVECTOR qRotate;
 		XMVECTOR setVec;
-		qRotate = XMQuaternionRotationAxis(ROTATE_AXIS, (float)((float)(rand() % 315)/100.0f));
+		qRotate = XMQuaternionRotationAxis(ROTATE_AXIS, (float)((float)(rand() % 630)/100.0f));
 		setVec = XMVector3Rotate(ptn.GetvSet(), qRotate);
 		GameObject* obj = ptn.Instantiate<NormalBlock>((GameObject*)(&ptn)->GetParent());
 		XMFLOAT3 pos;
