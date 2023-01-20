@@ -3,7 +3,8 @@
 class Stage1 : public GameObject
 {
 private:
-    int hModel_;
+    int   hModel_;
+    float scrollSpeed_;
 
 public:
     //コンストラクタ

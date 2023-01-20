@@ -2,6 +2,7 @@
 #include "SceneManager.h"
 #include"../TestScene.h"
 #include"../PlayScene.h"
+#include"../ImageManager.h"
 #include"../TitleScene.h"
 #include"Model.h"
 
@@ -25,7 +26,7 @@ void SceneManager::Update()
 	{
 		KillAllChildren();
 		ModelManager::Release();
-
+		ImageManager::AllRelease();
 
 		switch (nextSceneID_)
 		{

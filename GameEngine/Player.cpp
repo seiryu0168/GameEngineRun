@@ -3,6 +3,7 @@
 #include"Engine/Model.h"
 #include"EngineTime.h"
 #include"Engine/Camera.h"
+#include"Engine/SphereCollider.h"
 #include"Stage1.h"
 namespace
 {
@@ -10,6 +11,7 @@ namespace
 	static const float    INPUT_ATTENUATION = 0.2f;
 	static const float	  ROLLING_SPEED		= 5.0f;
 	static const float	  MAX_SPEED			= 5.0f;
+	static const int	  MAX_GOD_TIME		= 40;
 }
 Player::Player(GameObject* parent)
 	:GameObject(parent,"Player"),
@@ -17,8 +19,9 @@ Player::Player(GameObject* parent)
 	hModel_(-1),
 	rotate(0),
 	vCamPos_(XMVectorSet(0, 5, -15, 0)),
-	runTime_(0),
-	speedRate(0)
+	godTime_(0),
+	speedRate(0),
+	hp_(2)
 {
 }
 
@@ -28,6 +31,9 @@ Player::~Player()
 
 void Player::Initialize()
 {
+	SphereCollider* pCollision = new SphereCollider(XMFLOAT3(0, 0, 0), 0.5f);
+	AddCollider(pCollision);
+
 	centerPos_ = XMLoadFloat3(&transform_.position_);
 	RayCastData ray;
 	ray.dir = { 0,-1,0 };
@@ -51,7 +57,12 @@ void Player::Update()
 	transform_.rotate_.x += 4.0f;
 	
 	CameraControl();
-	runTime_++;
+	if (godMode_ == true && godTime_ < 30)
+	{
+		godTime_++;
+	}
+	else
+		godMode_ = false;
 
 }
 
@@ -61,6 +72,20 @@ void Player::Draw()
 
 void Player::Release()
 {
+}
+
+void Player::OnCollision(GameObject* pTarget)
+{
+	if (pTarget->GetTag() == "Block"&&godMode_==false)
+	{
+		hp_--;
+		godMode_ = true;
+		godTime_ = 0;
+	}
+	if (pTarget->GetTag() == "Restore")
+	{
+		hp_++;
+	}
 }
 
 void Player::CameraControl()

@@ -17,6 +17,7 @@ protected:
 	std::string	objectName_;			//名前
 	int objectID_;						//オブジェクト固有の番号
 	std::string objectTag_;				//オブジェクトに任意でつけられる識別用の名前
+	bool useCollider_;					//当たり判定の処理を行うかどうか
 	bool killFlag_;						//キルするかどうか
 	bool drawFlag_;						//描画するかどうか
 public:
@@ -82,6 +83,9 @@ public:
 			void SetScaleZ(float z) { transform_.scale_.z = z; }
 			void SetScale(XMFLOAT3 scale) { transform_.scale_ = scale; }
 
+			void SetUseCollider(bool isUse) { useCollider_ = isUse; }
+			bool GetUseCollider() { return useCollider_; }
+			
 			void SetTag(std::string tagName) { objectTag_ = tagName; }
 			std::string GetTag() { return objectTag_; }
 
@@ -92,6 +96,7 @@ public:
 			std::list<GameObject*>* GetChildList() { return &childList_; }
 			std::string GetObjectName() { return objectName_; }
 			int GetObjectID() { return objectID_; }
+
 
 			//指定した座標に回転させる行列を作る関数
 			XMMATRIX LookAtMatrix(XMFLOAT3 target, XMVECTOR frontVec, XMVECTOR upVec = XMVectorSet(0, 1, 0, 0));

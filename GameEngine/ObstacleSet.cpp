@@ -7,7 +7,7 @@ namespace
 {
 	static const XMVECTOR ROTATE_AXIS  = XMVectorSet(0, 0, 1, 0);
 	static const XMFLOAT3 RAYCAST_DIR  = XMFLOAT3(0, -1, 0);
-	static const int	  SET_INTERVAL = 30;
+	static const int	  SET_INTERVAL = 240;
 }
 ObstacleSet::ObstacleSet(GameObject* parent)
 	:GameObject(parent,"ObstacleSet")
@@ -67,14 +67,14 @@ void ObstacleSet::ChangeState(PaternState<ObstacleSet>* ptn)
 
 void ObstacleSet::SetPattern1::Init(ObstacleSet& ptn)
 {
-	
+	settingTime_ = 0;
 }
 
 void ObstacleSet::SetPattern1::Update(ObstacleSet& ptn)
 {
 	settingTime_++;
 
-	if (settingTime_==SET_INTERVAL)
+	if (settingTime_%30==0)
 	{
 		XMVECTOR qRotate;
 		XMVECTOR setVec;
@@ -86,14 +86,41 @@ void ObstacleSet::SetPattern1::Update(ObstacleSet& ptn)
 		XMStoreFloat3(&pos, setVec);
 		XMStoreFloat3(&pos, XMLoadFloat3(&setterPos)+setVec);
 		obj->SetPosition(pos);
-		settingTime_ = 0;
+	}
+	if (settingTime_ == SET_INTERVAL)
+	{
+		ptn.ChangeState(SetPattern2::GetInstance());
 	}
 }
 
 void ObstacleSet::SetPattern2::Init(ObstacleSet& ptn)
 {
+	settingTime_ = 0;
 }
 
 void ObstacleSet::SetPattern2::Update(ObstacleSet& ptn)
 {
+	settingTime_++;
+	if (settingTime_ %120 == 0)
+	{
+		XMVECTOR qRotate;
+		XMVECTOR setVec;
+		qRotate = XMQuaternionRotationAxis(ROTATE_AXIS, (float)((float)(rand() % 630) / 100.0f));
+		for (int i = 0; i < 5; i++)
+		{
+			qRotate= XMQuaternionRotationAxis(ROTATE_AXIS, 10.0f*i);
+			setVec = XMVector3Rotate(ptn.GetvSet(), qRotate);
+			GameObject* obj = ptn.Instantiate<NormalBlock>((GameObject*)(&ptn)->GetParent());
+			XMFLOAT3 pos;
+			XMFLOAT3 setterPos = ptn.GetPosition();
+			XMStoreFloat3(&pos, setVec);
+			XMStoreFloat3(&pos, XMLoadFloat3(&setterPos) + setVec);
+			obj->SetPosition(pos);
+		}
+	}
+
+	if (settingTime_ == SET_INTERVAL)
+	{
+		ptn.ChangeState(SetPattern1::GetInstance());
+	}
 }

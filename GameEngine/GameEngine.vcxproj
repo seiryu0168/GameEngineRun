@@ -196,6 +196,7 @@
     <ClCompile Include="PaternState.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayScene.cpp" />
+    <ClCompile Include="ResultScene.cpp" />
     <ClCompile Include="SetObject.cpp" />
     <ClCompile Include="Stage1.cpp" />
     <ClCompile Include="Test.cpp" />
@@ -247,6 +248,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="ResultScene.h" />
     <ClInclude Include="SetObject.h" />
     <ClInclude Include="Stage1.h" />
     <ClInclude Include="Test.h" />

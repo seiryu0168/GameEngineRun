@@ -68,9 +68,9 @@ void ImageManager::Draw(int imgHandle)
 	imageList_[imgHandle]->pSprite_->Draw(imageList_[imgHandle]->transform_, imageList_[imgHandle]->rect_, imageList_[imgHandle]->alpha_, imageList_[imgHandle]->changeColor_);
 }
 
-void ImageManager::Draw()
+void ImageManager::DrawSub()
 {
-	for (int i = 0; i < imageList_.size(); i++)
+	for (int i = imageList_.size()-1; i >-1 ; i--)
 	{
 		Draw(i);
 	}
@@ -142,8 +142,7 @@ void ImageManager::SetImageSize(int imgHandle, XMFLOAT3 size)
 	}
 
 	size.z = 0;
-	imageList_[imgHandle]->transform_.scale_.x *= size.x;
-	imageList_[imgHandle]->transform_.scale_.y *= size.y;
+	imageList_[imgHandle]->transform_.scale_ = size;
 }
 
 void ImageManager::ColorChange(int imgHandle,XMFLOAT4 color)

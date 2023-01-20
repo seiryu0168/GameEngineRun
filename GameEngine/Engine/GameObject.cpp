@@ -9,6 +9,7 @@ GameObject::GameObject(GameObject* parent, const std::string& name)
 	: pParent_(parent),
 	objectName_(name),
 	objectTag_(""),
+	useCollider_(true),
 	killFlag_(0),
 	drawFlag_(true)
 {
@@ -130,7 +131,7 @@ void GameObject::Collision(GameObject* pTarget)
 
 		for (auto j = pTarget->colliderList_.begin(); j != pTarget->colliderList_.end();j++)
 		{
-			if ((*i)->IsHit(*j))
+			if ((*i)->IsHit(*j)&&(*i)->GetpColObject()->GetUseCollider())
 			{
 				this->OnCollision(pTarget);
 			}

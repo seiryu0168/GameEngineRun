@@ -17,7 +17,7 @@ namespace ImageManager
 	/// </summary>
 	/// <param name="imageHandle">‰æ‘œ”Ô†</param>
 	void Draw(int imgHandle);
-	void Draw();
+	void DrawSub();
 	
 	/// <summary>
 	/// ‰æ‘œ‚ÌØ‚è”²‚«”ÍˆÍƒŠƒZƒbƒg

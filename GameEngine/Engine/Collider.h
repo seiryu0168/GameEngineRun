@@ -30,6 +30,7 @@ class Collider
 	XMFLOAT3     center_;		//Œ´“_
 	XMFLOAT3     size_;			//‘å‚«‚³
 	Transform    transform_;
+	bool		 useCollider_;
 
 
 public:
@@ -98,5 +99,7 @@ public:
 		center_ = center;
 		size_ = size;
 	}
+
+	void SetUsable(bool isUseCollider) { useCollider_ = isUseCollider; }
 };
 

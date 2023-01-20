@@ -3,6 +3,7 @@
 #include"Player.h"
 #include"Engine/Fbx.h"
 #include"ObstacleSet.h"
+#include"TitleUI.h"
 #include"SetObject.h"
 #include"Test.h"
 #include"Stage1.h"
@@ -18,9 +19,9 @@ ObjectSetter::~ObjectSetter()
 void ObjectSetter::Initialize()
 {
 	std::string sceneName = GetParent()->GetObjectName();
-	if (sceneName == "TitleName")
+	if (sceneName == "TitleScene")
 	{
-
+		Instantiate<TitleUI>(GetParent());
 	}
 
 	if (sceneName == "PlayScene")
