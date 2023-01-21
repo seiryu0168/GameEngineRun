@@ -21,13 +21,13 @@
 
 namespace EngineTime
 {
-	int	   frame_;
-	double time;
-	double fixedTime;
-	float  deltaTime;
-	float  fixedDeltaTime;
-	float  timeScale;
-	float maxmumDeltaTime;
+	unsigned long frame_;
+	double		  time;
+	double		  fixedTime;
+	float		  deltaTime;
+	float		  fixedDeltaTime;
+	float		  timeScale;
+	float		  maxmumDeltaTime;
 
 };
 
@@ -53,7 +53,7 @@ float EngineTime::GetTimeScale()
 {
 	return timeScale;
 }
-int EngineTime::GetFrame()
+unsigned long EngineTime::GetFrame()
 {
 	return frame_;
 }
@@ -76,4 +76,9 @@ void EngineTime::SetTime()
 void EngineTime::Update()
 {
 	frame_++;
+}
+
+void EngineTime::ResetFrame()
+{
+	frame_ = 0;
 }

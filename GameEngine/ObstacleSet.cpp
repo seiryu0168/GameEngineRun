@@ -1,16 +1,22 @@
 #include "ObstacleSet.h"
 #include"Engine/Model.h"
+#include"Engine/SceneManager.h"
 #include"Stage1.h"
-#include"NormalBlock.h"	
+#include"EngineTime.h"
+#include"NormalBlock.h"
+#include"Engine/Input.h"
 #include<iostream>
 namespace
 {
 	static const XMVECTOR ROTATE_AXIS  = XMVectorSet(0, 0, 1, 0);
 	static const XMFLOAT3 RAYCAST_DIR  = XMFLOAT3(0, -1, 0);
 	static const int	  SET_INTERVAL = 240;
+	static const float    MAX_RUN_TIME = 30.0f;
+
 }
 ObstacleSet::ObstacleSet(GameObject* parent)
-	:GameObject(parent,"ObstacleSet")
+	:GameObject(parent,"ObstacleSet"),
+	isSpawnGoal_(false)
 {
 
 }
@@ -33,7 +39,7 @@ void ObstacleSet::Initialize()
 	NormalBlock* pNormal = nullptr;
 	XMFLOAT3 initPos = {};
 	XMFLOAT3 setPos = transform_.position_;
-	setPos.z = 30;
+	setPos.z = 60;
 	XMVECTOR qRotate = XMVectorSet(0, 0, 0, 0);
 	for (int i = 0; i < 20; i++)
 	{
@@ -49,7 +55,18 @@ void ObstacleSet::Initialize()
 
 void ObstacleSet::Update()
 {
-	pPattern_->Update(*this);
+	if ((M_PI / 180.0f) * EngineTime::GetFrame() >= MAX_RUN_TIME)
+	{
+		isSpawnGoal_ = true;
+	}
+	if (isSpawnGoal_==false)
+	{
+		pPattern_->Update(*this);
+	}
+	if (Input::IsKeyDown(DIK_I))
+	{
+		((SceneManager*)FindObject("SceneManager"))->ChangeScene(SCENE_ID_RESULT);
+	}
 }
 
 void ObstacleSet::Release()
@@ -105,16 +122,17 @@ void ObstacleSet::SetPattern2::Update(ObstacleSet& ptn)
 	{
 		XMVECTOR qRotate;
 		XMVECTOR setVec;
-		qRotate = XMQuaternionRotationAxis(ROTATE_AXIS, (float)((float)(rand() % 630) / 100.0f));
+		qRotate = XMQuaternionRotationAxis(ROTATE_AXIS, ((float)(rand() % 630) / 100.0f));
 		for (int i = 0; i < 5; i++)
 		{
-			qRotate= XMQuaternionRotationAxis(ROTATE_AXIS, 10.0f*i);
+			qRotate= XMQuaternionRotationAxis(ROTATE_AXIS, (M_PI/180.0f)*30.0f*i);
 			setVec = XMVector3Rotate(ptn.GetvSet(), qRotate);
 			GameObject* obj = ptn.Instantiate<NormalBlock>((GameObject*)(&ptn)->GetParent());
 			XMFLOAT3 pos;
 			XMFLOAT3 setterPos = ptn.GetPosition();
 			XMStoreFloat3(&pos, setVec);
 			XMStoreFloat3(&pos, XMLoadFloat3(&setterPos) + setVec);
+			pos.z += 10 * i;
 			obj->SetPosition(pos);
 		}
 	}

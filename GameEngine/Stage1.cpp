@@ -30,7 +30,7 @@ void Stage1::Initialize()
 //çXêV
 void Stage1::Update() 
 {
-	scrollSpeed_ = min(((float)EngineTime::GetFrame() / 60.0f) * 0.004f,MAX_SCROLL_SPEED);
+	scrollSpeed_ = min(0.04f+((float)EngineTime::GetFrame() / 60.0f) * 0.004f,MAX_SCROLL_SPEED);
 }
 
 void Stage1::FixedUpdate()

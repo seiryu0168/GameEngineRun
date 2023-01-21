@@ -43,6 +43,7 @@ HRESULT Sprite::Initialize()
 void Sprite::Draw(Transform& transform, RECT rect, float alpha,XMFLOAT4 color)
 {
 	Direct3D::SetShader(SHADER_2D);
+	Direct3D::SetBlendMode(BLEND_DEFAULT);
 	//コンスタントバッファに情報を渡す
 	transform.Calclation();
 
@@ -53,9 +54,10 @@ void Sprite::Draw(Transform& transform, RECT rect, float alpha,XMFLOAT4 color)
 	CONSTANT_BUFFER cb;
 	
 	//最終的な行列
-	cb.matWorld = XMMatrixTranspose(matCut*transform.GetWorldScaleMatrix() * matImageSize * transform.GetWorldRotateMatrix() * transform.GetWorldTranslateMatrix());
+	cb.matWorld = XMMatrixTranspose(matCut*transform.GetLocalScaleMatrix() * transform.GetLocalRotateMatrix() * matImageSize * transform.GetLocalTranslateMatrix());
 	
-	XMMATRIX matTexTrans = XMMatrixTranslation((float)rect.left / size_.x, (float)rect.top / size_.y, 1.0f);
+	//テクスチャ座標の変換
+	XMMATRIX matTexTrans = XMMatrixTranslation((float)rect.left / size_.x, (float)rect.top / size_.y, 0.0f);
 	XMMATRIX matTexScale = XMMatrixScaling((float)rect.right / size_.x, (float)rect.bottom / size_.y, 1.0f);
 
 	cb.matUVTrans = XMMatrixTranspose(matTexScale * matTexTrans);

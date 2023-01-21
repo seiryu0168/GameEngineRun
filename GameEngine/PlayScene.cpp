@@ -1,5 +1,6 @@
 #include "PlayScene.h"
 #include"ObjectSetter.h"
+#include"EngineTime.h"
 #include"Test.h"
 // コンストラクタ
 PlayScene::PlayScene(GameObject * parent)
@@ -16,7 +17,6 @@ void PlayScene::Initialize()
 //更新
 void PlayScene::Update()
 {
-	elapsedFrame_++;
 }
 
 //描画

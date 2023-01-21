@@ -3,7 +3,11 @@
 class ResultScene : public GameObject
 {
 private:
-
+	int hPictScore_;
+	int hPictStar_;
+	int hPictScoreBarBase_;
+	int hPictScoreBar_;
+	int time_;
 public:
 	ResultScene(GameObject* parent);
 	~ResultScene();

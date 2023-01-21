@@ -76,8 +76,6 @@ HRESULT Fbx::Load(std::string fileName)
 	//ディレクトリを元に戻す
 	SetCurrentDirectory(defaultDirectory);
 
-	//マネージャ解放
-	pFbxManager_->Destroy();
 	return S_OK;
 }
 

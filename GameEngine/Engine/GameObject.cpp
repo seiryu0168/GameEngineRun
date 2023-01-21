@@ -177,10 +177,10 @@ void GameObject::KillObjectSub(GameObject* pTarget)
 {
 	if (!pTarget->childList_.empty())
 	{
-		for (auto itr = pTarget->childList_.begin(); itr != pTarget->childList_.end(); itr++)
+		for (auto itr = pTarget->childList_.begin(); itr != pTarget->childList_.end();)
 		{
 			KillObjectSub(*itr);
-			delete* itr;
+			delete *itr;
 			itr = pTarget->childList_.erase(itr);
 		}
 		pTarget->childList_.clear();

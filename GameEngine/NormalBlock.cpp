@@ -5,7 +5,8 @@
 
 namespace
 {
-	static const float SPEED = 6.0f;
+	static const float SPEED	   = 6.0f;
+	static const float MAX_SPEED = 4.6f;
 }
 NormalBlock::NormalBlock(GameObject* parent)
 	:GameObject(parent,"NormalBlock"),
@@ -30,7 +31,10 @@ void NormalBlock::Initialize()
 void NormalBlock::Update()
 {
 	speedRate_ = EngineTime::GetFrame() / 60.0f * 0.01f;
-	transform_.position_.z -= SPEED*speedRate_;
+	float moveSpeed= 0.63f + SPEED * speedRate_;
+	moveSpeed = min(moveSpeed, MAX_SPEED);
+	transform_.position_.z -= moveSpeed;
+
 	if (transform_.position_.z <= -1.0f)
 	{
 		KillMe();

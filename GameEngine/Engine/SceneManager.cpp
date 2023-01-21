@@ -2,8 +2,10 @@
 #include "SceneManager.h"
 #include"../TestScene.h"
 #include"../PlayScene.h"
+#include"../ResultScene.h"
 #include"../ImageManager.h"
 #include"../TitleScene.h"
+#include"../EngineTime.h"
 #include"Model.h"
 
 
@@ -27,12 +29,14 @@ void SceneManager::Update()
 		KillAllChildren();
 		ModelManager::Release();
 		ImageManager::AllRelease();
+		EngineTime::ResetFrame();
 
 		switch (nextSceneID_)
 		{
-		case SCENE_ID_TITLE: Instantiate<TitleScene>(this); break;
-		case SCENE_ID_PLAY: Instantiate<PlayScene>(this); break;
-		case SCENE_ID_TEST: Instantiate<TestScene>(this); break;
+		case SCENE_ID_TITLE	: Instantiate<TitleScene>(this); break;
+		case SCENE_ID_PLAY	: Instantiate<PlayScene>(this); break;
+		case SCENE_ID_RESULT: Instantiate<ResultScene>(this); break;
+		case SCENE_ID_TEST	: Instantiate<TestScene>(this); break;
 		}
 		currentSceneID_ = nextSceneID_;
 	}

@@ -1,5 +1,6 @@
 #pragma once
 #include"Engine/Direct3D.h"
+#include"Engine/Transform.h"
 #include<vector>
 #include<string>
 
@@ -10,7 +11,7 @@ namespace ImageManager
 	/// </summary>
 	/// <param name="fileName">ファイル名</param>
 	/// <returns>画像番号</returns>
-	int Load(std::string fileName);
+	int Load(std::string fileName,const Transform* transform = nullptr);
 	
 	/// <summary>
 	/// 画像描画
@@ -62,6 +63,12 @@ namespace ImageManager
 	/// <param name="imgHandle">画像番号</param>
 	/// <param name="size">サイズ</param>
 	void  SetImageSize(int imgHandle, XMFLOAT3 size);
+
+	/// <summary>
+	/// Transgorm設定
+	/// </summary>
+	/// <param name="transform">Transform</param>
+	void SetTransform(int imgHandle,Transform& transform);
 
 	/// <summary>
 	/// 色を変える

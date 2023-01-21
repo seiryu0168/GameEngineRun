@@ -7,6 +7,7 @@ class ObstacleSet : public GameObject
 	 int setInterval_;
 	 XMVECTOR vSet_;
 	 PaternState<ObstacleSet>* pPattern_;
+	 bool isSpawnGoal_;
  public:
 	 ObstacleSet(GameObject* parent);
 	 ~ObstacleSet();
@@ -19,6 +20,8 @@ class ObstacleSet : public GameObject
 	 void ChangeState(PaternState<ObstacleSet>* ptn);
 
 	 XMVECTOR GetvSet() { return vSet_; }
+
+	 void SetGoal();
 
 	 class SetPattern1: public PaternState<ObstacleSet>
 	 {

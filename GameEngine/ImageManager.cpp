@@ -22,7 +22,7 @@ namespace ImageManager
 
 	std::vector<imageData*> imageList_;
 }
-int ImageManager::Load(std::string fileName)
+int ImageManager::Load(std::string fileName,const Transform* transform)
 {
 	imageData* pImage = new imageData;
 	pImage->fileName_ = fileName;
@@ -50,7 +50,10 @@ int ImageManager::Load(std::string fileName)
 			return -1;
 		}
 	}
-
+	if (transform != nullptr)
+	{
+		pImage->transform_ = (Transform&)transform;
+	}
 	//ƒŠƒXƒg‚É’Ç‰Á
 	imageList_.push_back(pImage);
 
@@ -143,6 +146,16 @@ void ImageManager::SetImageSize(int imgHandle, XMFLOAT3 size)
 
 	size.z = 0;
 	imageList_[imgHandle]->transform_.scale_ = size;
+}
+
+void ImageManager::SetTransform(int imgHandle, Transform& transform)
+{
+	if (imgHandle < 0 || imgHandle >= imageList_.size())
+	{
+		return;
+	}
+
+	imageList_[imgHandle]->transform_ = transform;
 }
 
 void ImageManager::ColorChange(int imgHandle,XMFLOAT4 color)
