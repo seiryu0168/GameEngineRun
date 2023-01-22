@@ -1,6 +1,8 @@
 #pragma once
 #include"Engine/GameObject.h"
 #include"PaternState.h"
+
+class Player;
 class ObstacleSet : public GameObject
 {
  private:
@@ -8,6 +10,7 @@ class ObstacleSet : public GameObject
 	 XMVECTOR vSet_;
 	 PaternState<ObstacleSet>* pPattern_;
 	 bool isSpawnGoal_;
+	 Player* pPlayer_;
  public:
 	 ObstacleSet(GameObject* parent);
 	 ~ObstacleSet();
@@ -54,6 +57,29 @@ class ObstacleSet : public GameObject
 			 if (ins == nullptr)
 			 {
 				 ins = new SetPattern2;
+			 }
+
+			 return ins;
+		 }
+
+		 void Init(ObstacleSet& ptn);
+		 void Update(ObstacleSet& ptn);
+
+	 };
+
+	 class SetGoal : public PaternState<ObstacleSet>
+	 {
+	 private:
+		 int afterTime_;
+		 int settingTime_;
+		 int hPictBlack_;
+	 public:
+		 static SetGoal* GetInstance()
+		 {
+			 static SetGoal* ins = nullptr;
+			 if (ins == nullptr)
+			 {
+				 ins = new SetGoal;
 			 }
 
 			 return ins;

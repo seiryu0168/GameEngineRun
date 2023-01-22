@@ -1,15 +1,10 @@
 #include "NormalBlock.h"
-#include"EngineTime.h"
+//#include"EngineTime.h"
 #include"Engine/Model.h"
 #include"Engine/SphereCollider.h"
 
-namespace
-{
-	static const float SPEED	   = 6.0f;
-	static const float MAX_SPEED = 4.6f;
-}
 NormalBlock::NormalBlock(GameObject* parent)
-	:GameObject(parent,"NormalBlock"),
+	:Obstacle(parent,"NormalBlock"),
 	hModel_(-1),
 	speedRate_(1.0f)
 {

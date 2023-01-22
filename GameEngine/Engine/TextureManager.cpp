@@ -28,7 +28,10 @@ int TextureManager::Load(std::string fileName)
 	if (pTextureData->pTexture_ == nullptr)
 	{
 		pTextureData->pTexture_ = new Texture;
-		pTextureData->pTexture_->Load(pTextureData->fileName_);
+		if (FAILED(pTextureData->pTexture_->Load(pTextureData->fileName_)))
+		{
+			return -1;
+		}
 	}
 	textureList_.push_back(pTextureData);
 	return (int)textureList_.size() - 1;

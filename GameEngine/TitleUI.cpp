@@ -13,7 +13,7 @@ TitleUI::TitleUI(GameObject* parent) :
 	hPictBase_(-1),
 	hPictPlay_(-1),
 	hPictExit_(-1),
-	butttonNum_(0),
+	buttonNum_(0),
 	inputInterval_(INTERVAL)
 {
 }
@@ -25,10 +25,13 @@ TitleUI::~TitleUI()
 void TitleUI::Initialize()
 {
 	hPictBase_ = ImageManager::Load("Assets\\TitleImage.jpg");
+	assert(hPictBase_ >= 0);
 	hPictPlay_ = ImageManager::Load("Assets\\PlayImage.jpg");
+	assert(hPictPlay_ >= 0);
 	ImageManager::SetImagePos(hPictPlay_, XMFLOAT3(-800, -200, 0));
 
 	hPictExit_ = ImageManager::Load("Assets\\ExitImage.jpg");
+	assert(hPictExit_ >= 0);
 	ImageManager::SetImagePos(hPictExit_, XMFLOAT3(800, -200, 0));
 }
 
@@ -39,15 +42,15 @@ void TitleUI::Update()
 	{
 		if (Input::GetLStick_X() >= 0.7f)
 		{
-			butttonNum_++;
+			buttonNum_++;
 		}
 		else if (Input::GetLStick_X() <= -0.7f)
 		{
-			butttonNum_--;
+			buttonNum_--;
 		}
 		inputInterval_ = 0;
 	}
-	int num = abs(butttonNum_ % MAX_BUTTON);
+	int num = abs(buttonNum_ % MAX_BUTTON);
 	switch (num)
 	{
 	case 0:

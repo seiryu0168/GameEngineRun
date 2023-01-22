@@ -3,7 +3,7 @@
 #include"EngineTime.h"
 namespace
 {
-	static const float MAX_SCROLL_SPEED = 0.3f;
+	static const float MAX_SCROLL_SPEED = 0.2f;
 }
 //コンストラクタ
 Stage1::Stage1(GameObject* parent)

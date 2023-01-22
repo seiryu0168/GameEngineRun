@@ -1,33 +1,66 @@
 #include "ResultScene.h"
 #include"ImageManager.h"
+#include"InterSceneData.h"
+#include"EngineTime.h"
 
 
 ResultScene::ResultScene(GameObject* parent)
 	:GameObject(parent,"ResultScene"),
-	hPictScore_(-1),
-	hPictStar_(-1),
-	hPictScoreBarBase_(-1),
-	hPictScoreBar_(-1),
-	time_(0)
+	hPict_(-1),
+	time_(0),
+	score_(0),
+	rslt_(nullptr)
 {
+	for (int i = 0; i < 3; i++)
+	{
+		hPictScore_[i] = -1;
+	}
+
 }
 
 ResultScene::~ResultScene()
 {
+	Release();
 }
 
 void ResultScene::Initialize()
 {
-	hPictScore_ = ImageManager::Load("Assets\\ResultImage.jpg");
+	hPict_ = ImageManager::Load("Assets\\ResultImage.jpg");
+	assert(hPict_ >= 0);
 	Transform t = GetParent()->GetTransform();
-	hPictScoreBar_ = ImageManager::Load("Assets\\ScoreBarBaseTest.png");
-	//hPictScoreBarBase_ = ImageManager::Load("Assets\\ScoreBarFrame.png");
+	for (int i = 0; i < 3; i++)
+	{
+		hPictScore_[i] = ImageManager::Load("Assets\\Star.png");
+		assert(hPictScore_ >= 0);
+		ImageManager::SetRect(hPictScore_[i], 0, 512, 0, 0);
+		ImageManager::SetImageSize(hPictScore_[i], XMFLOAT3(0.4f,0.4f,0.4f));
+	}
+	ImageManager::SetImagePos(hPictScore_[0], XMFLOAT3(-512, 0, 0));
+	ImageManager::SetImagePos(hPictScore_[1], XMFLOAT3(0, 0, 0));
+	ImageManager::SetImagePos(hPictScore_[2], XMFLOAT3(512, 0, 0));
+	rslt_ = new Result();
+	rslt_->Init();
 }
 
 void ResultScene::Update()
 {
-	time_++;
-	ImageManager::SetRect(hPictScoreBar_, 0, 200, 0, time_);
+	if (EngineTime::GetFrame() > 60 && EngineTime::GetFrame()-60 < InterSceneData::GetData("time")/10)
+	{
+		time_++;
+		ImageManager::SetRect(hPictScore_[score_],0,512,0,((float)time_ - (float)(60*score_))/(60.0f/512.0f));
+		if (time_ % 60 == 0)
+		{
+			score_++;
+		}
+	}
+
+	if(EngineTime::GetFrame()>=40)
+	{
+		rslt_->Update(this);
+	}
+
+
+	
 }
 
 void ResultScene::Draw()
@@ -36,4 +69,5 @@ void ResultScene::Draw()
 
 void ResultScene::Release()
 {
+	SAFE_DELETE(rslt_);
 }

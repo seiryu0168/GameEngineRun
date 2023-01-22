@@ -1,10 +1,13 @@
 #include "ObstacleSet.h"
 #include"Engine/Model.h"
 #include"Engine/SceneManager.h"
+#include"InterSceneData.h"
+#include"ImageManager.h"
 #include"Stage1.h"
 #include"EngineTime.h"
 #include"NormalBlock.h"
 #include"Engine/Input.h"
+#include"Player.h"
 #include<iostream>
 namespace
 {
@@ -27,6 +30,7 @@ ObstacleSet::~ObstacleSet()
 
 void ObstacleSet::Initialize()
 {
+	pPlayer_ = (Player*)FindObject("Player");
 	srand((unsigned int)time(NULL));
 	RayCastData ray;
 	ray.dir = RAYCAST_DIR;
@@ -41,6 +45,7 @@ void ObstacleSet::Initialize()
 	XMFLOAT3 setPos = transform_.position_;
 	setPos.z = 60;
 	XMVECTOR qRotate = XMVectorSet(0, 0, 0, 0);
+	//ç≈èâÇæÇØ20å¬è·äQï®èoÇµÇ∆Ç≠
 	for (int i = 0; i < 20; i++)
 	{
 		pNormal = Instantiate<NormalBlock>(GetParent());
@@ -55,18 +60,13 @@ void ObstacleSet::Initialize()
 
 void ObstacleSet::Update()
 {
-	if ((M_PI / 180.0f) * EngineTime::GetFrame() >= MAX_RUN_TIME)
+	if (EngineTime::GetFrame()/60.0f >= MAX_RUN_TIME|| pPlayer_->GetHP() == 0)
 	{
-		isSpawnGoal_ = true;
+		ChangeState(SetGoal::GetInstance());
 	}
-	if (isSpawnGoal_==false)
-	{
-		pPattern_->Update(*this);
-	}
-	if (Input::IsKeyDown(DIK_I))
-	{
-		((SceneManager*)FindObject("SceneManager"))->ChangeScene(SCENE_ID_RESULT);
-	}
+
+	pPattern_->Update(*this);
+	
 }
 
 void ObstacleSet::Release()
@@ -140,5 +140,26 @@ void ObstacleSet::SetPattern2::Update(ObstacleSet& ptn)
 	if (settingTime_ == SET_INTERVAL)
 	{
 		ptn.ChangeState(SetPattern1::GetInstance());
+	}
+}
+
+void ObstacleSet::SetGoal::Init(ObstacleSet& ptn)
+{
+	InterSceneData::AddData("time", (int)EngineTime::GetFrame());
+	settingTime_ = 0;
+	afterTime_ = 0;
+	hPictBlack_ = ImageManager::Load("Assets\\BlackOut.png");
+	ImageManager::SetAlpha(hPictBlack_,0);
+}
+
+void ObstacleSet::SetGoal::Update(ObstacleSet& ptn)
+{
+	settingTime_++;
+	if(settingTime_>0)
+	ImageManager::SetAlpha(hPictBlack_,255.0f*((float)settingTime_/150.0f));
+
+	if (settingTime_ >= 150)
+	{
+		((SceneManager*)ptn.FindObject("SceneManager"))->ChangeScene(SCENE_ID_RESULT);
 	}
 }

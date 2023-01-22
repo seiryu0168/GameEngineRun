@@ -113,7 +113,7 @@ void ImageManager::SetAlpha(int imgHandle,float alpha)
 		return;
 	}
 
-	imageList_[imgHandle]->alpha_ = alpha;
+	imageList_[imgHandle]->alpha_ = alpha/255.0f;
 }
 
 float ImageManager::GetAlpha(int imgHandle)

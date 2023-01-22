@@ -7,6 +7,8 @@ private:
 	bool boost_;
 	int godTime_;
 	int hModel_;
+	int hPictDamege_;
+	int hPictLife_[5];
 	int hp_;
 	float speedRate;
 	float rotate;
@@ -29,6 +31,8 @@ public:
 	void OnCollision(GameObject* pTarget) override;
 
 	void CameraControl();
+	
+	int GetHP() { return hp_; }
 
 	float GetSpeedRate() { return speedRate; }
 };

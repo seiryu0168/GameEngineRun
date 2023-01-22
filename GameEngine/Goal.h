@@ -1,24 +1,21 @@
 #pragma once
 #include"Obstacle.h"
-class NormalBlock : public Obstacle
+class Goal : public Obstacle
 {
 private:
 	int hModel_;
 	float speedRate_;
 public:
-	NormalBlock(GameObject* parent);
-	~NormalBlock();
-
+	Goal(GameObject* parent);
+	~Goal();
 	void Initialize() override;
 
 	void Update() override;
-
+		
 	void Draw() override;
 
 	void Release() override;
-
-	void OnCollision(GameObject* pTarget) override;
-	
-	void SetSpeed(float speed) { speedRate_ = speed; }
+		
+		
 };
 

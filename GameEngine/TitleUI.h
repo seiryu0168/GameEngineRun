@@ -7,7 +7,7 @@ private:
 	int hPictPlay_;
 	int hPictExit_;
 	int inputInterval_;
-	int butttonNum_;
+	int buttonNum_;
 public:
 	TitleUI(GameObject* parent);
 	~TitleUI();
