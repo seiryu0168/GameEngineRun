@@ -3,6 +3,7 @@
 class Result// : public GameObject
 {
 private:
+	int hPict_;
 	int hPictRtnTitle_;
 	int hPictReStart_;
 	int inputInterval_;

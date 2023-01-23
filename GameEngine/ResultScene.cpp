@@ -25,8 +25,6 @@ ResultScene::~ResultScene()
 
 void ResultScene::Initialize()
 {
-	hPict_ = ImageManager::Load("Assets\\ResultImage.jpg");
-	assert(hPict_ >= 0);
 	Transform t = GetParent()->GetTransform();
 	for (int i = 0; i < 3; i++)
 	{
@@ -44,7 +42,7 @@ void ResultScene::Initialize()
 
 void ResultScene::Update()
 {
-	if (EngineTime::GetFrame() > 60 && EngineTime::GetFrame()-60 < 180-(180-InterSceneData::GetData("time")/10))
+	if (EngineTime::GetFrame() > 60 && time_ < 180-(180-InterSceneData::GetData("time")/10))
 	{
 		time_++;
 		ImageManager::SetRect(hPictScore_[score_],0,512,0,((float)time_ - (float)(60*score_))/(60.0f/512.0f));

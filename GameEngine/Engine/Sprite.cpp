@@ -44,11 +44,13 @@ void Sprite::Draw(Transform& transform, RECT rect, float alpha,XMFLOAT4 color)
 {
 	Direct3D::SetShader(SHADER_2D);
 	Direct3D::SetBlendMode(BLEND_DEFAULT);
+	Direct3D::SetDepthBufferWriteEnable(false);
+
 	//コンスタントバッファに情報を渡す
 	transform.Calclation();
 
 	//画面のサイズに合わせる行列
-	XMMATRIX matImageSize = XMMatrixScaling((float)(1.0f / Direct3D::GetScreenWidth()), (float)(1.0f / Direct3D::GetScreenHeight()), 1.0f);
+	XMMATRIX matImageSize = XMMatrixScaling((float)(1.0f / Direct3D::GetScreenWidth()), (float)(1.0f / Direct3D::GetScreenHeight()), 0.0f);
 	//切り抜きサイズに合わせる行列
 	XMMATRIX matCut = XMMatrixScaling(rect.right, rect.bottom, 1.0f);
 	CONSTANT_BUFFER cb;
@@ -90,8 +92,13 @@ void Sprite::Draw(Transform& transform, RECT rect, float alpha,XMFLOAT4 color)
 	//コンスタントバッファ
 	Direct3D::pContext->VSSetConstantBuffers(0, 1, &pConstantBuffer_);	//頂点シェーダー用
 	Direct3D::pContext->PSSetConstantBuffers(0, 1, &pConstantBuffer_);	//ピクセルシェーダー用
-
+	//描画
 	Direct3D::pContext->DrawIndexed(indexNum_, 0, 0);
+
+	Direct3D::SetShader(SHADER_3D);
+	Direct3D::SetDepthBufferWriteEnable(true);
+
+
 }
 
 // 頂点データ用バッファの設定

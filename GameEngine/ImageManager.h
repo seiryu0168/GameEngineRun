@@ -76,6 +76,8 @@ namespace ImageManager
 	/// <param name="color">RGBA‚Ì’l</param>
 	void ColorChange(int imgHandle,XMFLOAT4 color);
 
+	XMFLOAT3 GetImageSize(int imgHandle);
+
 	void Release(int imgHandle);
 	void AllRelease();
 };

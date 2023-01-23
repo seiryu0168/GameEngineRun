@@ -549,6 +549,19 @@ void Direct3D::SetBlendMode(BLEND_MODE mode)
 
 	pContext->OMSetDepthStencilState(pDepthStencilState[mode], 0);
 }
+void Direct3D::SetDepthBufferWriteEnable(bool isWrite)
+{
+	if (isWrite)
+	{
+		pContext->OMSetRenderTargets(1, &pRenderTargetView, pDepthStencilView);
+	}
+
+	else
+	{
+		pContext->OMSetRenderTargets(1, &pRenderTargetView, nullptr);
+	}
+
+}
 ID3D11Device* Direct3D::GetDevice()
 {
 	return pDevice;

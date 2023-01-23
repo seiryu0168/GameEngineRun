@@ -100,7 +100,7 @@ void ImageManager::SetRect(int imgHandle, int top, int bottom, int left, int rig
 		return;
 	}
 
-	imageList_[imgHandle]->rect_.top	  = top;
+	imageList_[imgHandle]->rect_.top    = top;
 	imageList_[imgHandle]->rect_.bottom = bottom;
 	imageList_[imgHandle]->rect_.left   = left;
 	imageList_[imgHandle]->rect_.right  = right;
@@ -161,6 +161,15 @@ void ImageManager::SetTransform(int imgHandle, Transform& transform)
 void ImageManager::ColorChange(int imgHandle,XMFLOAT4 color)
 {
 	imageList_[imgHandle]->changeColor_ = color;
+}
+
+XMFLOAT3 ImageManager::GetImageSize(int imgHandle)
+{
+	if (imgHandle < 0 || imageList_.size() < imgHandle)
+	{
+		return XMFLOAT3(-9999,-9999,-9999);
+	}
+	return imageList_[imgHandle]->pSprite_->GetSize();
 }
 
 void ImageManager::Release(int imgHandle)

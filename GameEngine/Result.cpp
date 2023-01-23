@@ -9,7 +9,8 @@ namespace
 	static const int MAX_BUTTON = 2;
 }
 Result::Result()
-	:hPictRtnTitle_(-1),
+	:hPict_(-1),
+	 hPictRtnTitle_(-1),
 	 hPictReStart_(-1),
 	 inputInterval_(0),
 	 buttonNum_(0)
@@ -22,11 +23,14 @@ Result::~Result()
 
 void Result::Init()
 {
-	hPictRtnTitle_ = ImageManager::Load("Assets\\ReturnTitle.jpg");
+	hPictRtnTitle_ = ImageManager::Load("Assets\\ReturnTitle.png");
 	assert(hPictRtnTitle_ >= 0);
 	
-	hPictReStart_ = ImageManager::Load("Assets\\ReStart.jpg");
+	hPictReStart_ = ImageManager::Load("Assets\\ReStart.png");
 	assert(hPictReStart_ >= 0);
+
+	hPict_ = ImageManager::Load("Assets\\ResultImage.png");
+	assert(hPict_ >= 0);
 
 	ImageManager::SetImagePos(hPictRtnTitle_, XMFLOAT3(-800, -500, 0));
 	ImageManager::SetImagePos(hPictReStart_, XMFLOAT3(800, -500, 0));

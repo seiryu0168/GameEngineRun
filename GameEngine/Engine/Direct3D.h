@@ -64,6 +64,7 @@ namespace Direct3D
 
 	void SetShader(SHADER_TYPE type);
 	void SetBlendMode(BLEND_MODE mode);
+	void SetDepthBufferWriteEnable(bool isWrite);
 	ID3D11Device* GetDevice();
 	ID3D11DeviceContext* GetContext();
 	int GetScreenWidth();

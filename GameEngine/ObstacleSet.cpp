@@ -147,7 +147,7 @@ void ObstacleSet::SetPattern2::Update(ObstacleSet& ptn)
 
 	if (settingTime_ == SET_INTERVAL)
 	{
-		ptn.ChangeState(SetPattern1::GetInstance());
+		ptn.ChangeState(SetPattern3::GetInstance());
 	}
 }
 
@@ -187,22 +187,33 @@ void ObstacleSet::SetPattern3::Init(ObstacleSet& ptn)
 
 void ObstacleSet::SetPattern3::Update(ObstacleSet& ptn)
 {
+	settingTime_++;
 	if (settingTime_ % 30 == 0)
 	{
 		XMVECTOR qRotate;
 		XMVECTOR setVec;
-		float firstRotate;
+		float firstRotate = (float)(rand() % 630) / 100.0f;
 		for (int i = 0; i < 4; i++)
 		{
-			qRotate = XMQuaternionRotationAxis(ROTATE_AXIS, ((float)(rand() % 630) / 100.0f));
+			qRotate = XMQuaternionRotationAxis(ROTATE_AXIS, firstRotate+((float)M_PI/180*90.0f*i));
 			setVec = XMVector3Rotate(ptn.GetvSet(), qRotate);
 			
 			GameObject* obj = ptn.Instantiate<NormalBlock>(ptn.GetParent());
 			XMFLOAT3 pos;
 			XMFLOAT3 setterPos = ptn.GetPosition();
 			XMStoreFloat3(&pos, setVec);
-			//XMStoreFloat3(&pos, XMLoadFloat3(&setterPos) + setVec * ());
+			XMStoreFloat3(&pos, XMLoadFloat3(&setterPos) + setVec);
+			obj->SetPosition(pos);
+
+			obj = ptn.Instantiate<NormalBlock>(ptn.GetParent());
+			setterPos = ptn.GetPosition();
+			XMStoreFloat3(&pos, XMLoadFloat3(&setterPos) + setVec*0.5f);
 			obj->SetPosition(pos);
 		}
+	}
+
+	if (settingTime_ == SET_INTERVAL)
+	{
+		ptn.ChangeState(SetPattern1::GetInstance());
 	}
 }

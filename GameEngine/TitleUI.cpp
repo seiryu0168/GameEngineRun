@@ -24,15 +24,15 @@ TitleUI::~TitleUI()
 
 void TitleUI::Initialize()
 {
-	hPictBase_ = ImageManager::Load("Assets\\TitleImage.jpg");
-	assert(hPictBase_ >= 0);
-	hPictPlay_ = ImageManager::Load("Assets\\PlayImage.jpg");
+	hPictPlay_ = ImageManager::Load("Assets\\PlayImage.png");
 	assert(hPictPlay_ >= 0);
 	ImageManager::SetImagePos(hPictPlay_, XMFLOAT3(-800, -200, 0));
 
-	hPictExit_ = ImageManager::Load("Assets\\ExitImage.jpg");
+	hPictExit_ = ImageManager::Load("Assets\\ExitImage.png");
 	assert(hPictExit_ >= 0);
 	ImageManager::SetImagePos(hPictExit_, XMFLOAT3(800, -200, 0));
+	hPictBase_ = ImageManager::Load("Assets\\TitleImage.png");
+	assert(hPictBase_ >= 0);
 }
 
 void TitleUI::Update()
