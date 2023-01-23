@@ -4,7 +4,8 @@
 
 Goal::Goal(GameObject* parent)
 	:Obstacle(parent,"Goal"),
-	hModel_(-1)
+	hModel_(-1),
+	speedRate_(1.0f)
 {
 }
 

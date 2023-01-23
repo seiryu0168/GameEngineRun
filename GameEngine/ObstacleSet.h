@@ -67,6 +67,48 @@ class ObstacleSet : public GameObject
 
 	 };
 
+	 class SetPattern3 : public PaternState<ObstacleSet>
+	 {
+	 private:
+		 int settingTime_;
+	 public:
+		 static SetPattern3* GetInstance()
+		 {
+			 static SetPattern3* ins = nullptr;
+			 if (ins == nullptr)
+			 {
+				 ins = new SetPattern3;
+			 }
+
+			 return ins;
+		 }
+
+		 void Init(ObstacleSet& ptn);
+		 void Update(ObstacleSet& ptn);
+
+	 };
+
+
+	 class SetPatternFake : public PaternState<ObstacleSet>
+	 {
+	 private:
+	 public:
+		 static SetPatternFake* GetInstance()
+		 {
+			 static SetPatternFake* ins = nullptr;
+			 if (ins == nullptr)
+			 {
+				 ins = new SetPatternFake;
+			 }
+
+			 return ins;
+		 }
+
+		 void Init(ObstacleSet& ptn);
+		 void Update(ObstacleSet& ptn);
+
+	 };
+
 	 class SetGoal : public PaternState<ObstacleSet>
 	 {
 	 private:

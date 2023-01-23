@@ -6,6 +6,7 @@
 #include"Stage1.h"
 #include"EngineTime.h"
 #include"NormalBlock.h"
+#include"Goal.h"
 #include"Engine/Input.h"
 #include"Player.h"
 #include<iostream>
@@ -60,6 +61,13 @@ void ObstacleSet::Initialize()
 
 void ObstacleSet::Update()
 {
+	if (EngineTime::GetFrame() / 60.0f >= MAX_RUN_TIME - 5.0f&&isSpawnGoal_==false)
+	{
+		GameObject* obj = Instantiate<Goal>(GetParent());
+		obj->SetPosition(GetPosition());
+		ChangeState(SetPatternFake::GetInstance());
+		isSpawnGoal_ = true;
+	}
 	if (EngineTime::GetFrame()/60.0f >= MAX_RUN_TIME|| pPlayer_->GetHP() == 0)
 	{
 		ChangeState(SetGoal::GetInstance());
@@ -97,7 +105,7 @@ void ObstacleSet::SetPattern1::Update(ObstacleSet& ptn)
 		XMVECTOR setVec;
 		qRotate = XMQuaternionRotationAxis(ROTATE_AXIS, (float)((float)(rand() % 630)/100.0f));
 		setVec = XMVector3Rotate(ptn.GetvSet(), qRotate);
-		GameObject* obj = ptn.Instantiate<NormalBlock>((GameObject*)(&ptn)->GetParent());
+		GameObject* obj = ptn.Instantiate<NormalBlock>(ptn.GetParent());
 		XMFLOAT3 pos;
 		XMFLOAT3 setterPos = ptn.GetPosition();
 		XMStoreFloat3(&pos, setVec);
@@ -122,12 +130,12 @@ void ObstacleSet::SetPattern2::Update(ObstacleSet& ptn)
 	{
 		XMVECTOR qRotate;
 		XMVECTOR setVec;
-		qRotate = XMQuaternionRotationAxis(ROTATE_AXIS, ((float)(rand() % 630) / 100.0f));
+		float firstRotate = (float)(rand() % 630) / 100.0f;
 		for (int i = 0; i < 5; i++)
 		{
-			qRotate= XMQuaternionRotationAxis(ROTATE_AXIS, (M_PI/180.0f)*30.0f*i);
+			qRotate= XMQuaternionRotationAxis(ROTATE_AXIS, firstRotate+(M_PI/180.0f)*30.0f*i);
 			setVec = XMVector3Rotate(ptn.GetvSet(), qRotate);
-			GameObject* obj = ptn.Instantiate<NormalBlock>((GameObject*)(&ptn)->GetParent());
+			GameObject* obj = ptn.Instantiate<NormalBlock>(ptn.GetParent());
 			XMFLOAT3 pos;
 			XMFLOAT3 setterPos = ptn.GetPosition();
 			XMStoreFloat3(&pos, setVec);
@@ -155,11 +163,46 @@ void ObstacleSet::SetGoal::Init(ObstacleSet& ptn)
 void ObstacleSet::SetGoal::Update(ObstacleSet& ptn)
 {
 	settingTime_++;
-	if(settingTime_>0)
+	
 	ImageManager::SetAlpha(hPictBlack_,255.0f*((float)settingTime_/150.0f));
 
 	if (settingTime_ >= 150)
 	{
 		((SceneManager*)ptn.FindObject("SceneManager"))->ChangeScene(SCENE_ID_RESULT);
+	}
+}
+
+void ObstacleSet::SetPatternFake::Init(ObstacleSet& ptn)
+{
+}
+
+void ObstacleSet::SetPatternFake::Update(ObstacleSet& ptn)
+{
+}
+
+void ObstacleSet::SetPattern3::Init(ObstacleSet& ptn)
+{
+	settingTime_ = 0;
+}
+
+void ObstacleSet::SetPattern3::Update(ObstacleSet& ptn)
+{
+	if (settingTime_ % 30 == 0)
+	{
+		XMVECTOR qRotate;
+		XMVECTOR setVec;
+		float firstRotate;
+		for (int i = 0; i < 4; i++)
+		{
+			qRotate = XMQuaternionRotationAxis(ROTATE_AXIS, ((float)(rand() % 630) / 100.0f));
+			setVec = XMVector3Rotate(ptn.GetvSet(), qRotate);
+			
+			GameObject* obj = ptn.Instantiate<NormalBlock>(ptn.GetParent());
+			XMFLOAT3 pos;
+			XMFLOAT3 setterPos = ptn.GetPosition();
+			XMStoreFloat3(&pos, setVec);
+			//XMStoreFloat3(&pos, XMLoadFloat3(&setterPos) + setVec * ());
+			obj->SetPosition(pos);
+		}
 	}
 }

@@ -5,7 +5,7 @@
 
 namespace
 {
-	static const int INTERVAL = 30;
+	static const int INTERVAL   = 30;
 	static const int MAX_BUTTON = 2;
 }
 Result::Result()
