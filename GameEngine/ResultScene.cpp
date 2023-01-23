@@ -25,7 +25,8 @@ ResultScene::~ResultScene()
 
 void ResultScene::Initialize()
 {
-	Transform t = GetParent()->GetTransform();
+	rslt_ = new Result();
+	rslt_->Init();
 	for (int i = 0; i < 3; i++)
 	{
 		hPictScore_[i] = ImageManager::Load("Assets\\Star.png");
@@ -36,8 +37,8 @@ void ResultScene::Initialize()
 	ImageManager::SetImagePos(hPictScore_[0], XMFLOAT3(-512, 0, 0));
 	ImageManager::SetImagePos(hPictScore_[1], XMFLOAT3(0, 0, 0));
 	ImageManager::SetImagePos(hPictScore_[2], XMFLOAT3(512, 0, 0));
-	rslt_ = new Result();
-	rslt_->Init();
+	hPict_ = ImageManager::Load("Assets\\ResultImage.png");
+	assert(hPict_ >= 0);
 }
 
 void ResultScene::Update()

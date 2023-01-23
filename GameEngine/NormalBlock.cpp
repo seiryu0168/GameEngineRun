@@ -26,7 +26,7 @@ void NormalBlock::Initialize()
 void NormalBlock::Update()
 {
 	speedRate_ = EngineTime::GetFrame() / 60.0f * 0.01f;
-	float moveSpeed= 0.63f + SPEED * speedRate_;
+	float moveSpeed= DEFAULT_SPEED + SPEED * speedRate_;
 	moveSpeed = min(moveSpeed, MAX_SPEED);
 	transform_.position_.z -= moveSpeed;
 

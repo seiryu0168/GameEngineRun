@@ -94,25 +94,25 @@ void Player::OnCollision(GameObject* pTarget)
 	{
 		hp_--;
 		hp_ = max(hp_, 0);
+		ImageManager::SetAlpha(hPictDamege_, 255.0f * ((float)(MAX_LIFE-hp_) / (float)MAX_LIFE));
 		godMode_ = true;
 		godTime_ = 0;
-		ImageManager::SetAlpha(hPictDamege_, 255.0f * ((float)(MAX_LIFE-hp_) / (float)MAX_LIFE));
 	}
-	if (pTarget->GetTag() == "Restore")
+	if (pTarget->GetTag() == "Recovery"&&godMode_==false)
 	{
 		hp_++;
 		hp_ = min(hp_, MAX_LIFE);
-		ImageManager::SetAlpha(hPictDamege_, 255.0f * (hp_ / MAX_LIFE));
-
+		ImageManager::SetAlpha(hPictDamege_, 255.0f * ((float)(MAX_LIFE-hp_) / MAX_LIFE));
+		godMode_ = true;
+		godTime_ = 0;
 	}
 }
 
 void Player::CameraControl()
 {
-	
 	XMVECTOR pos = XMLoadFloat3(&transform_.position_);
 	XMVECTOR target = XMVectorSet(0, 0, 70, 0);
 	Camera::SetUpVector(-centerPos_);
-	Camera::SetPosition(centerPos_);// +vCamPos_);
+	Camera::SetPosition(centerPos_);
 	Camera::SetTarget(pos+target);
 }

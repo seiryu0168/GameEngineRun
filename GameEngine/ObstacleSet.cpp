@@ -6,6 +6,7 @@
 #include"Stage1.h"
 #include"EngineTime.h"
 #include"NormalBlock.h"
+#include"Recovery.h"
 #include"Goal.h"
 #include"Engine/Input.h"
 #include"Player.h"
@@ -44,7 +45,7 @@ void ObstacleSet::Initialize()
 	NormalBlock* pNormal = nullptr;
 	XMFLOAT3 initPos = {};
 	XMFLOAT3 setPos = transform_.position_;
-	setPos.z = 60;
+	setPos.z = 100;
 	XMVECTOR qRotate = XMVectorSet(0, 0, 0, 0);
 	//ç≈èâÇæÇØ20å¬è·äQï®èoÇµÇ∆Ç≠
 	for (int i = 0; i < 20; i++)
@@ -99,13 +100,29 @@ void ObstacleSet::SetPattern1::Update(ObstacleSet& ptn)
 {
 	settingTime_++;
 
-	if (settingTime_%30==0)
+	if (settingTime_%30-EngineTime::GetFrame()/60==0)
 	{
 		XMVECTOR qRotate;
 		XMVECTOR setVec;
-		qRotate = XMQuaternionRotationAxis(ROTATE_AXIS, (float)((float)(rand() % 630)/100.0f));
+
+	    //âÒì]äp(ÉâÉWÉAÉì)ÇãÅÇﬂÇÈ
+		float angle = (M_PI / 180.0f) * (rand()/360);
+		qRotate = XMQuaternionRotationAxis(ROTATE_AXIS, angle);
 		setVec = XMVector3Rotate(ptn.GetvSet(), qRotate);
-		GameObject* obj = ptn.Instantiate<NormalBlock>(ptn.GetParent());
+		GameObject* obj;
+
+		//1/4Ç≈âÒïúÇ™èoÇƒÇ≠ÇÈ
+		if ((rand() % 3) == 1)
+		{
+			obj = ptn.Instantiate<Recovery>(ptn.GetParent());
+			obj->SetRotateZ(angle*M_PI);
+		}
+		else
+		{
+			obj = ptn.Instantiate<NormalBlock>(ptn.GetParent());
+		}
+
+		//è·äQï®ÇÃèoÇÈà íuÇê›íË
 		XMFLOAT3 pos;
 		XMFLOAT3 setterPos = ptn.GetPosition();
 		XMStoreFloat3(&pos, setVec);
@@ -126,14 +143,14 @@ void ObstacleSet::SetPattern2::Init(ObstacleSet& ptn)
 void ObstacleSet::SetPattern2::Update(ObstacleSet& ptn)
 {
 	settingTime_++;
-	if (settingTime_ %120 == 0)
+	if (settingTime_ %90-EngineTime::GetFrame()/30 == 0)
 	{
 		XMVECTOR qRotate;
 		XMVECTOR setVec;
 		float firstRotate = (float)(rand() % 630) / 100.0f;
 		for (int i = 0; i < 5; i++)
 		{
-			qRotate= XMQuaternionRotationAxis(ROTATE_AXIS, firstRotate+(M_PI/180.0f)*30.0f*i);
+			qRotate= XMQuaternionRotationAxis(ROTATE_AXIS, firstRotate+(M_PI/180.0f)*45.0f*i);
 			setVec = XMVector3Rotate(ptn.GetvSet(), qRotate);
 			GameObject* obj = ptn.Instantiate<NormalBlock>(ptn.GetParent());
 			XMFLOAT3 pos;
@@ -188,7 +205,7 @@ void ObstacleSet::SetPattern3::Init(ObstacleSet& ptn)
 void ObstacleSet::SetPattern3::Update(ObstacleSet& ptn)
 {
 	settingTime_++;
-	if (settingTime_ % 30 == 0)
+	if (settingTime_ % 50-EngineTime::GetFrame()/60 == 0)
 	{
 		XMVECTOR qRotate;
 		XMVECTOR setVec;
@@ -214,6 +231,7 @@ void ObstacleSet::SetPattern3::Update(ObstacleSet& ptn)
 
 	if (settingTime_ == SET_INTERVAL)
 	{
+
 		ptn.ChangeState(SetPattern1::GetInstance());
 	}
 }

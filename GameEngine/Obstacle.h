@@ -5,6 +5,7 @@ class Obstacle : public GameObject
 {
 
 public :
+	const float DEFAULT_SPEED;
 	const float SPEED;
 	const float MAX_SPEED;
 	Obstacle(GameObject* parent, std::string name);

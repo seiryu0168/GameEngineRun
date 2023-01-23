@@ -29,9 +29,6 @@ void Result::Init()
 	hPictReStart_ = ImageManager::Load("Assets\\ReStart.png");
 	assert(hPictReStart_ >= 0);
 
-	hPict_ = ImageManager::Load("Assets\\ResultImage.png");
-	assert(hPict_ >= 0);
-
 	ImageManager::SetImagePos(hPictRtnTitle_, XMFLOAT3(-800, -500, 0));
 	ImageManager::SetImagePos(hPictReStart_, XMFLOAT3(800, -500, 0));
 }
