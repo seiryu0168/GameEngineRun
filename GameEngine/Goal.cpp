@@ -15,7 +15,7 @@ Goal::~Goal()
 
 void Goal::Initialize()
 {
-	hModel_ = ModelManager::Load("Assets\\TestBox.fbx");
+	hModel_ = ModelManager::Load("Assets\\GoalTape.fbx");
 }
 
 void Goal::Update()
@@ -25,7 +25,7 @@ void Goal::Update()
 	moveSpeed = min(moveSpeed, MAX_SPEED);
 	transform_.position_.z -= moveSpeed;
 
-	if (transform_.position_.z <= -1.0f)
+	if (transform_.position_.z <= -1000.0f)
 	{
 		KillMe();
 	}

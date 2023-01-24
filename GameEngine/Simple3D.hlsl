@@ -94,8 +94,7 @@ float4 PS(VS_OUT inData) : SV_Target
 
 	float4 fog = float4(0, 0,0, 0);
 	float depth = length(inData.eyeVector);
-	float fogDepth = 1 / (depth-30);
-	fog = float4(0, 0, 0, fogDepth);
+	float fogDepth = 30 / depth;
 
 
 	//環境光(アンビエント)
@@ -113,9 +112,10 @@ float4 PS(VS_OUT inData) : SV_Target
 
 	outColor = diffuse * shade + diffuse * ambient + speculer;
 
+	fog = float4(outColor.r * fogDepth, outColor.g * fogDepth, outColor.b*fogDepth, 1);
 	if (depth >= 30)
 	{
-		return outColor * fog;
+		return  fog;
 	}
 
 	return outColor;
