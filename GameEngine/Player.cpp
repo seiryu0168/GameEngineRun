@@ -16,20 +16,22 @@ namespace
 	static const int	  MAX_LIFE			= 5;
 }
 Player::Player(GameObject* parent)
-	:GameObject(parent,"Player"),
+	:GameObject(parent, "Player"),
+	jump_(false),
+	godMode_(false),
+	recover_(false),
+	jumpTime_(0),
 	centerPos_(XMVectorSet(0,0,0,0)),
 	hModel_(-1),
 	hPictDamege_(-1),
+	hPictDmegeFrash_(-1),
+	hPictRecovery_(-1),
 	rotate(0),
 	vCamPos_(XMVectorSet(0, 5, -15, 0)),
 	godTime_(0),
 	speedRate(0),
 	hp_(MAX_LIFE)
 {
-	for (int i = 0; i < 5; i++)
-	{
-		hPictLife_[i] = (-1);
-	}
 }
 
 Player::~Player()
@@ -38,12 +40,14 @@ Player::~Player()
 
 void Player::Initialize()
 {
-	for (int i = 0; i < 5; i++)
-	{
-		//hPictLife_[i]=ImageManager::Load("")
-	}
 	hPictDamege_ = ImageManager::Load("Assets\\DamegeTexture.png");
 	assert(hPictDamege_ >= 0);
+	hPictDmegeFrash_ = ImageManager::Load("Assets\\DamegeImage_2.png");
+	assert(hPictDmegeFrash_ >= 0);
+	hPictRecovery_ = ImageManager::Load("Assets\\RecoveryImage.png");
+	assert(hPictRecovery_ >= 0);
+	ImageManager::SetAlpha(hPictRecovery_, 0);
+	ImageManager::SetAlpha(hPictDmegeFrash_, 0);
 	ImageManager::SetAlpha(hPictDamege_, 0);
 	SphereCollider* pCollision = new SphereCollider(XMFLOAT3(0, 0, 0), 0.5f);
 	AddCollider(pCollision);
@@ -55,28 +59,54 @@ void Player::Initialize()
 	int stage = ((Stage1*)FindObject("Stage1"))->GetModelHandle();
 	ModelManager::RayCast(stage,ray);
 	
-	centerPos_ = XMVector3Normalize((ray.hitPos - centerPos_))*(ray.dist-1.0f);
+	CENTER_VEC = XMVector3Normalize((ray.hitPos - centerPos_))*(ray.dist-1.0f);
+	
 	transform_.position_.z = 10;
 }
 
 void Player::Update()
 {
-	speedRate = EngineTime::GetFrame() / 60.0f * 0.01f;
+	//ŽžŠÔŒo‰ß‚É‚æ‚Á‚ÄŠp‘¬“x‚ª•Ï‚í‚é
+	speedRate = EngineTime::GetFrame() / 60.0f * 0.02f;
 	speedRate = min(speedRate, MAX_SPEED);
 	rotate = Input::GetLStick_X()*INPUT_ATTENUATION* speedRate;
+
 	XMVECTOR qRotate = XMQuaternionRotationAxis(ROTATE_AXIS, rotate);
-	vCamPos_= XMVector3Rotate(vCamPos_, qRotate);
-	centerPos_ = XMVector3Rotate(centerPos_, qRotate);
-	XMStoreFloat3(&transform_.position_, centerPos_);
-	transform_.rotate_.x += 4.0f;
 	
-	CameraControl();
-	if (godMode_ == true && godTime_ < 30)
+	//ƒWƒƒƒ“ƒv
+	if (Input::IsPadButtonDown(XINPUT_GAMEPAD_A)&&jump_==false)
 	{
-		godTime_++;
+		jump_ = true;
+	}
+
+	if (jump_ == true)
+	{
+		jumpTime_ += (M_PI/180.0f)*5.0f;
+		if (jumpTime_ > M_PI)
+		{
+			jumpTime_ = 0;
+			jump_ = false;
+		}
+	}
+	centerPos_ = XMVector3Rotate(CENTER_VEC, qRotate);
+	CENTER_VEC = centerPos_;
+	centerPos_ *= (1 - (sin(jumpTime_) * 0.95));
+	XMStoreFloat3(&transform_.position_, centerPos_);
+
+	CameraControl();
+
+	//–³“GŽžŠÔ‚ÌŒvŽZ
+	if ((godMode_ == true||recover_==true) && godTime_ > 0)
+	{
+		ImageManager::SetAlpha(hPictDmegeFrash_, 255.0f * (godTime_ / 30.0f));
+		ImageManager::SetAlpha(hPictRecovery_, 255.0f * (godTime_ / 30.0f));
+		godTime_--;
 	}
 	else
+	{
 		godMode_ = false;
+		recover_ = false;
+	}
 
 }
 
@@ -95,24 +125,31 @@ void Player::OnCollision(GameObject* pTarget)
 		hp_--;
 		hp_ = max(hp_, 0);
 		ImageManager::SetAlpha(hPictDamege_, 255.0f * ((float)(MAX_LIFE-hp_) / (float)MAX_LIFE));
+		ImageManager::SetAlpha(hPictDmegeFrash_, 255.0f);
 		godMode_ = true;
-		godTime_ = 0;
+		godTime_ = 30;
 	}
-	if (pTarget->GetTag() == "Recovery"&&godMode_==false)
+	if (pTarget->GetTag() == "Recovery" && godMode_ == false)
 	{
 		hp_++;
 		hp_ = min(hp_, MAX_LIFE);
-		ImageManager::SetAlpha(hPictDamege_, 255.0f * ((float)(MAX_LIFE-hp_) / MAX_LIFE));
-		godMode_ = true;
-		godTime_ = 0;
+		ImageManager::SetAlpha(hPictDamege_, 255.0f * ((float)(MAX_LIFE - hp_) / MAX_LIFE));
+		ImageManager::SetAlpha(hPictRecovery_, 255.0f);
+		recover_ = true;
+		godTime_ = 30;
 	}
 }
 
 void Player::CameraControl()
 {
 	XMVECTOR pos = XMLoadFloat3(&transform_.position_);
-	XMVECTOR target = XMVectorSet(0, 0, 70, 0);
+	XMFLOAT3 target = XMFLOAT3(0, 0, 70);
+	if(godMode_&&recover_==false)
+	{ 
+		target.x += rand() % 10 / 10.0f;
+		target.y += rand() % 10 / 10.0f;
+	}
 	Camera::SetUpVector(-centerPos_);
-	Camera::SetPosition(centerPos_);
-	Camera::SetTarget(pos+target);
+	Camera::SetPosition(XMLoadFloat3(&transform_.position_));
+	Camera::SetTarget(pos+XMLoadFloat3(&target));
 }

@@ -27,6 +27,7 @@ void Recovery::Update()
 	float moveSpeed = DEFAULT_SPEED + SPEED * speedRate_;
 	moveSpeed = min(moveSpeed, MAX_SPEED);
 	transform_.position_.z -= moveSpeed;
+	transform_.rotate_.z+=3;
 
 	if (transform_.position_.z <= -1.0f)
 	{

@@ -43,7 +43,8 @@ void ResultScene::Initialize()
 
 void ResultScene::Update()
 {
-	if (EngineTime::GetFrame() > 60 && time_ < 180-(180-InterSceneData::GetData("time")/10))
+	int a = InterSceneData::GetData("time");
+	if (EngineTime::GetFrame() > 60 && time_ < InterSceneData::GetData("time")/10)
 	{
 		time_++;
 		ImageManager::SetRect(hPictScore_[score_],0,512,0,((float)time_ - (float)(60*score_))/(60.0f/512.0f));

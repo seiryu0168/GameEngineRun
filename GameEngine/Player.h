@@ -4,16 +4,21 @@ class Player : public GameObject
 {
 private:
 	bool godMode_;
-	bool boost_;
+	bool recover_;
+	bool jump_;
+	float jumpTime_;
 	int godTime_;
 	int hModel_;
 	int hPictDamege_;
-	int hPictLife_[5];
+	int hPictDmegeFrash_;
+	int hPictRecovery_;
 	int hp_;
 	float speedRate;
 	float rotate;
 	XMVECTOR vCamPos_;
+	XMVECTOR CENTER_VEC;
 	XMVECTOR centerPos_;
+
 
 
 public:
