@@ -51,7 +51,7 @@ VS_OUT VS(float4 pos : POSITION, float4 uv : TEXCOORD, float4 normal : NORMAL)
 	outData.pos = mul(pos, g_matWVP);
 	//視線ベクトル
 	float4 cameraPos = mul(pos, g_matW);
-	outData.eyeVector = normalize(g_cameraPosition - cameraPos);
+	outData.eyeVector = mul(g_cameraPosition,g_matW) - cameraPos;
 
 	//法線
 	normal.w = 0;
@@ -92,18 +92,32 @@ float4 PS(VS_OUT inData) : SV_Target
 		diffuse = g_diffuseColor;
 	}
 
+	float4 fog = float4(0, 0,0, 0);
+	float depth = length(inData.eyeVector);
+	float fogDepth = 1 / (depth-30);
+	fog = float4(0, 0, 0, fogDepth);
+
+
 	//環境光(アンビエント)
-	float4 ambient = float4(0.2, 0.2, 0.2, 1.0f);// g_ambient;
+	float4 ambient = float4(0.2, 0.2, 0.2, 1.0f);//
 	ambient.a = 1;
 	//鏡面反射光(スペキュラー)
 	float4 speculer = float4(0, 0, 0, 0);
 	if (g_speculer.a != 0)
 	{
+		inData.eyeVector = normalize(inData.eyeVector);
 		float4 vecReflect = reflect(light, inData.normal);
 		speculer = float4(1,1,1,0) * pow(saturate(dot(vecReflect, inData.eyeVector)), g_shininess) * g_speculer;
 	}
 	float4 outColor;
+
 	outColor = diffuse * shade + diffuse * ambient + speculer;
+
+	if (depth >= 30)
+	{
+		return outColor * fog;
+	}
+
 	return outColor;
 }
 

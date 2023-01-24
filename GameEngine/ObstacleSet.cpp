@@ -45,8 +45,9 @@ void ObstacleSet::Initialize()
 	NormalBlock* pNormal = nullptr;
 	XMFLOAT3 initPos = {};
 	XMFLOAT3 setPos = transform_.position_;
-	setPos.z = 100;
+	setPos.z = 200;
 	XMVECTOR qRotate = XMVectorSet(0, 0, 0, 0);
+
 	//最初だけ20個障害物出しとく
 	for (int i = 0; i < 20; i++)
 	{
@@ -62,7 +63,7 @@ void ObstacleSet::Initialize()
 
 void ObstacleSet::Update()
 {
-	if (EngineTime::GetFrame() / 60.0f >= MAX_RUN_TIME - 5.0f&&isSpawnGoal_==false)
+	if (EngineTime::GetFrame() / 60.0f >= MAX_RUN_TIME - 4.0f&&isSpawnGoal_==false)
 	{
 		GameObject* obj = Instantiate<Goal>(GetParent());
 		obj->SetPosition(GetPosition());
@@ -115,8 +116,9 @@ void ObstacleSet::SetPattern1::Update(ObstacleSet& ptn)
 		if ((rand() % 3) == 1)
 		{
 			obj = ptn.Instantiate<Recovery>(ptn.GetParent());
-			obj->SetRotateZ(angle*M_PI);
+			obj->SetRotateZ(angle*(180/M_PI));
 		}
+		//4/3で障害物が出る
 		else
 		{
 			obj = ptn.Instantiate<NormalBlock>(ptn.GetParent());
@@ -147,16 +149,25 @@ void ObstacleSet::SetPattern2::Update(ObstacleSet& ptn)
 	{
 		XMVECTOR qRotate;
 		XMVECTOR setVec;
-		float firstRotate = (float)(rand() % 630) / 100.0f;
+		
+		//回転オフセットを設定
+		float firstRotate = (M_PI/180.0f)*(rand()%360);
+		
+		//階段状に障害物を置く
 		for (int i = 0; i < 5; i++)
 		{
+			//オフセットを基準に45度ずつ角度を変化させる
 			qRotate= XMQuaternionRotationAxis(ROTATE_AXIS, firstRotate+(M_PI/180.0f)*45.0f*i);
 			setVec = XMVector3Rotate(ptn.GetvSet(), qRotate);
+			
+			//障害物設置
 			GameObject* obj = ptn.Instantiate<NormalBlock>(ptn.GetParent());
 			XMFLOAT3 pos;
 			XMFLOAT3 setterPos = ptn.GetPosition();
 			XMStoreFloat3(&pos, setVec);
 			XMStoreFloat3(&pos, XMLoadFloat3(&setterPos) + setVec);
+
+			//位置を変える
 			pos.z += 10 * i;
 			obj->SetPosition(pos);
 		}
@@ -170,19 +181,25 @@ void ObstacleSet::SetPattern2::Update(ObstacleSet& ptn)
 
 void ObstacleSet::SetGoal::Init(ObstacleSet& ptn)
 {
+	//ゲーム終了時点の時間を保存
 	InterSceneData::AddData("time", (int)EngineTime::GetFrame());
+	
+	//各初期化
 	settingTime_ = 0;
 	afterTime_ = 0;
+	
+	//画像ロード,アルファ値セット
 	hPictBlack_ = ImageManager::Load("Assets\\BlackOut.png");
 	ImageManager::SetAlpha(hPictBlack_,0);
 }
 
 void ObstacleSet::SetGoal::Update(ObstacleSet& ptn)
 {
-	settingTime_++;
-	
+	//画面を暗くしていく
+	settingTime_++;	
 	ImageManager::SetAlpha(hPictBlack_,255.0f*((float)settingTime_/150.0f));
-
+	
+	//シーン遷移
 	if (settingTime_ >= 150)
 	{
 		((SceneManager*)ptn.FindObject("SceneManager"))->ChangeScene(SCENE_ID_RESULT);
@@ -204,17 +221,22 @@ void ObstacleSet::SetPattern3::Init(ObstacleSet& ptn)
 
 void ObstacleSet::SetPattern3::Update(ObstacleSet& ptn)
 {
+	//時間の補正をかけつつ50フレームごとに障害物を設置
 	settingTime_++;
 	if (settingTime_ % 50-EngineTime::GetFrame()/60 == 0)
 	{
 		XMVECTOR qRotate;
 		XMVECTOR setVec;
-		float firstRotate = (float)(rand() % 630) / 100.0f;
+
+		//回転のオフセットを設定
+		float firstRotate = (M_PI/180.0f)*(rand() % 360);
 		for (int i = 0; i < 4; i++)
 		{
+			//回転クオータニオンを求める(ランダム)
 			qRotate = XMQuaternionRotationAxis(ROTATE_AXIS, firstRotate+((float)M_PI/180*90.0f*i));
 			setVec = XMVector3Rotate(ptn.GetvSet(), qRotate);
 			
+			//障害物設置
 			GameObject* obj = ptn.Instantiate<NormalBlock>(ptn.GetParent());
 			XMFLOAT3 pos;
 			XMFLOAT3 setterPos = ptn.GetPosition();
@@ -229,6 +251,7 @@ void ObstacleSet::SetPattern3::Update(ObstacleSet& ptn)
 		}
 	}
 
+	//240フレームたったらステータスを変える
 	if (settingTime_ == SET_INTERVAL)
 	{
 
